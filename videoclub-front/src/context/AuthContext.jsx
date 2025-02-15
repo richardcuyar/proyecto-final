@@ -1,9 +1,12 @@
+import React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useCart } from "./CartContext"; // ✅ Importamos el contexto del carrito
 
 // Crear el contexto de autenticación
 const AuthContext = createContext();
+const API_URL = import.meta.env.VITE_BACKEND_URL;
+console.log("🔗 Backend URL:", API_URL);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
@@ -78,8 +81,11 @@ export const AuthProvider = ({ children }) => {
 
   // 🔥 Nueva función para registrar usuarios
   const register = async ({ name, email, password }) => {
+    const API_URL = import.meta.env.VITE_BACKEND_URL;
+    console.log("🔗 Intentando registrar en:", `${API_URL}/auth/register`); // 🔥 Ver qué URL usa
+
     try {
-      const response = await fetch("http://localhost:3000/auth/register", {
+      const response = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -88,15 +94,16 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (!response.ok) {
-        console.error("Error en el registro:", response.statusText);
+        console.error("⚠️ Error en el registro:", response.statusText);
         return false;
       }
 
       const userData = await response.json();
-      login(userData); // 🔥 Inicia sesión automáticamente tras el registro
+      console.log("✅ Usuario registrado con éxito:", userData);
+      login(userData);
       return true;
     } catch (error) {
-      console.error("Error al registrarse:", error);
+      console.error("❌ Error al registrarse:", error);
       return false;
     }
   };
