@@ -5,8 +5,7 @@ import { useCart } from "./CartContext"; // ✅ Importamos el contexto del carri
 
 // Crear el contexto de autenticación
 const AuthContext = createContext();
-const API_URL = import.meta.env.VITE_BACKEND_URL;
-console.log("🔗 Backend URL:", API_URL);
+// const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
@@ -14,12 +13,10 @@ export const AuthProvider = ({ children }) => {
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
-  const { dispatch } = useCart() || {}; // 🔥 Evita errores si `useCart()` es undefined
+  const { dispatch } = useCart() || {};
 
   useEffect(() => {
     console.log("👤 Usuario actual:", user);
-
-    // ✅ Restaurar carrito si hay un usuario
     if (user) {
       const savedCart =
         JSON.parse(localStorage.getItem(`cart_${user.email}`)) || [];
@@ -36,31 +33,42 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user, dispatch]);
 
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+  // ✅ Iniciar sesión
+  const login = async (email, password) => {
+    const trimmedEmail = email.trim(); // Elimina espacios en blanco
+    const trimmedPassword = password.trim(); // Elimina espacios en blanco
+    console.log("🔑 Datos enviados desde el frontend:", {
+      trimmedEmail,
+      trimmedPassword,
+    });
 
-    // ✅ Restaurar el carrito al iniciar sesión
-    const savedCart =
-      JSON.parse(localStorage.getItem(`cart_${userData.email}`)) || [];
-    const savedTotal =
-      JSON.parse(localStorage.getItem(`cartTotal_${userData.email}`)) || 0;
-
-    if (dispatch) {
-      dispatch({
-        type: "SET_CART",
-        payload: { items: savedCart, total: savedTotal },
+    //  console.log("🔑 Datos enviados desde el frontend:", { email, password }); // Verifica los datos
+    // console.log("🔑 Contraseña enviada desde el frontend:", password); // Verifica la contraseña
+    try {
+      const response = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
-      console.log(
-        `🛒 Carrito restaurado en login para ${userData.email}:`,
-        savedCart
-      );
+
+      const data = await response.json();
+      console.log("📨 Respuesta del backend:", data); // Verifica la respuesta
+      if (response.ok) {
+        setUser(data);
+        localStorage.setItem("user", JSON.stringify(data));
+        console.log("✅ Login exitoso:", data);
+      } else {
+        console.error("❌ Error en el login:", data.message);
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error("🔥 Error al iniciar sesión:", error);
     }
   };
 
+  // ✅ Cerrar sesión
   const logout = () => {
     if (user) {
-      // ✅ Guardar el carrito antes de cerrar sesión
       localStorage.setItem(
         `cart_${user.email}`,
         JSON.stringify(JSON.parse(localStorage.getItem("cart")) || [])
@@ -70,40 +78,31 @@ export const AuthProvider = ({ children }) => {
         JSON.stringify(JSON.parse(localStorage.getItem("cartTotal")) || 0)
       );
     }
-
     setUser(null);
     localStorage.removeItem("user");
-
-    if (dispatch) {
-      dispatch({ type: "CLEAR_CART" }); // 🔥 Limpia el estado, pero no `localStorage`
-    }
+    if (dispatch) dispatch({ type: "CLEAR_CART" });
   };
 
-  // 🔥 Nueva función para registrar usuarios
+  // ✅ Registrar nuevo usuario
   const register = async ({ name, email, password }) => {
-    const API_URL = import.meta.env.VITE_BACKEND_URL;
-    console.log("🔗 Intentando registrar en:", `${API_URL}/auth/register`); // 🔥 Ver qué URL usa
-
     try {
-      const response = await fetch(`${API_URL}/auth/register`, {
+      const response = await fetch("http://localhost:3000/auth/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
       });
-
-      if (!response.ok) {
-        console.error("⚠️ Error en el registro:", response.statusText);
+      const data = await response.json();
+      if (response.ok) {
+        console.log("✅ Usuario registrado con éxito:", data);
+        login(email, password);
+        return true;
+      } else {
+        console.error("❌ Error en el registro:", data.message);
+        alert(data.message);
         return false;
       }
-
-      const userData = await response.json();
-      console.log("✅ Usuario registrado con éxito:", userData);
-      login(userData);
-      return true;
     } catch (error) {
-      console.error("❌ Error al registrarse:", error);
+      console.error("🔥 Error al registrarse:", error);
       return false;
     }
   };
@@ -115,10 +114,8 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// ✅ Validación de PropTypes
 AuthProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-// Hook para usar el contexto de autenticación
 export const useAuth = () => useContext(AuthContext);

@@ -9,7 +9,7 @@ const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
@@ -17,13 +17,13 @@ const LoginPage = () => {
       return;
     }
 
-    // 🔥 Simulación de autenticación
-    if (email === "user@example.com" && password === "password123") {
-      const userData = { email };
-      login(userData);
+    try {
+      // Llama a la función login del contexto de autenticación
+      await login(email, password);
       navigate("/"); // Redirigir al Home después de login
-    } else {
-      alert("Credenciales inválidas");
+    } catch (error) {
+      console.error("❌ Error en el login:", error);
+      alert("Credenciales inválidas"); // Muestra un mensaje de error
     }
   };
 
