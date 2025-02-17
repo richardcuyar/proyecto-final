@@ -56,7 +56,7 @@ function App() {
 
                       {/* Ruta protegida para Resumen del Pedido */}
                       <Route
-                        path="/order-summary"
+                        path="/order-summary/:orderId"
                         element={
                           <ProtectedRoute>
                             <OrderSummaryPage />

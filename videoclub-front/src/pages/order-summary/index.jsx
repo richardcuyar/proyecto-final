@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+
 import {
   List,
   ListItem,
@@ -9,13 +11,27 @@ import {
 } from "@mui/material";
 
 const OrderSummaryPage = () => {
+  const { orderId } = useParams(); // Obtenemos el ID del pedido desde la URL
+
   const [order, setOrder] = useState([]);
 
   useEffect(() => {
-    // 🔥 Recuperamos el pedido guardado en localStorage
-    const savedOrder = JSON.parse(localStorage.getItem("lastOrder")) || [];
-    setOrder(savedOrder);
-  }, []);
+    // 🔍 Cargar el pedido correcto usando el orderId de la URL
+    const fetchOrder = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/orders/${orderId}`);
+        if (!response.ok) {
+          throw new Error("No se pudo cargar el pedido");
+        }
+        const data = await response.json();
+        setOrder(data);
+      } catch (error) {
+        console.error("❌ Error al cargar el pedido:", error);
+      }
+    };
+
+    fetchOrder();
+  }, [orderId]);
 
   return (
     <Box
@@ -36,11 +52,11 @@ const OrderSummaryPage = () => {
       ) : (
         <>
           <List>
-            {order.map((movie, index) => (
-              <ListItem key={`${movie.id}-${index}`} divider>
+            {order.movies.map((movie, index) => (
+              <ListItem key={`${movie.movie._id}-${index}`} divider>
                 <ListItemText
-                  primary={movie.name}
-                  secondary={`Precio: $${movie.price}`}
+                  primary={movie.movie.name}
+                  secondary={`Precio: €${movie.movie.price} - Cantidad: ${movie.quantity}`}
                 />
               </ListItem>
             ))}
@@ -51,7 +67,13 @@ const OrderSummaryPage = () => {
           <Typography variant="h6">
             Total:{" "}
             <strong>
-              ${order.reduce((sum, movie) => sum + movie.price, 0).toFixed(2)}
+              €
+              {order.movies
+                .reduce(
+                  (sum, item) => sum + item.movie.price * item.quantity,
+                  0
+                )
+                .toFixed(2)}
             </strong>
           </Typography>
         </>

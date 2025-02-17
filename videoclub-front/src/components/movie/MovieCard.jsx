@@ -16,6 +16,7 @@ const MovieCard = ({ movie }) => {
 
   // Función para añadir la película al carrito
   const handleAddToCart = () => {
+    console.log("🆔 ID de la película enviado al carrito:", movie._id); // ➡️ Agregado para depuración
     dispatch({
       type: "ADD_ITEM",
       payload: {

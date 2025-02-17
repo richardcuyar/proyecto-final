@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TextField, Button, Typography, Box } from "@mui/material";
 import { useCart } from "../../context/CartContext"; // ✅ Para obtener el total
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const PaymentPage = () => {
   const { state, dispatch } = useCart();
@@ -21,18 +22,58 @@ const PaymentPage = () => {
   };
 
   // Simular el pago
+  // Importamos useAuth para acceder al ID del usuario
+  const { user } = useAuth(); // Aquí usamos useAuth correctamente
   const handlePayment = () => {
     console.log("💳 Datos de pago enviados:", paymentData);
 
-    // 🔥 Guardar los datos del pedido antes de vaciar el carrito
-    localStorage.setItem("lastOrder", JSON.stringify(state.items));
+    // 🔍 Verificar contenido del carrito
+    console.log("🛒 Estado actual del carrito:", state);
 
-    // Simulamos la confirmación del pago
-    setTimeout(() => {
-      alert("✅ Pago exitoso. ¡Gracias por tu compra!");
-      dispatch({ type: "CLEAR_CART" }); // Vaciamos el carrito después del pago
-      navigate("/order-summary"); // Redirigimos a la página de mis alquileres
-    }, 1500);
+    // 🔥 Crear el objeto del pedido
+    const orderData = {
+      member: user?._id, // Usamos el ID del usuario autenticado si existe
+      movies: state.items.map((item) => ({
+        movie: item.movie,
+        quantity: item.quantity,
+      })),
+    };
+
+    // Verificar si el ID está presente
+    if (!orderData.member) {
+      alert("⚠️ Error: No se pudo obtener el ID del usuario.");
+      return;
+    }
+
+    console.log("📦 orderData completo:", JSON.stringify(orderData, null, 2));
+
+    // Enviar el pedido al backend
+    fetch("http://localhost:3000/orders", {
+      method: "POST",
+      body: JSON.stringify(orderData),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al guardar el pedido");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("✅ Pedido guardado exitosamente:", data);
+        // 🔍 Guardar el ID del pedido en localStorage o pasarlo como parámetro
+        //   localStorage.setItem("lastOrderId", data.order._id);
+
+        alert("✅ Pago exitoso. ¡Gracias por tu compra!");
+
+        // Limpiar carrito después de guardar el pedido
+        dispatch({ type: "CLEAR_CART" });
+        navigate(`/order-summary/${data.order._id}`);
+      })
+      .catch((error) => {
+        console.error("❌ Error al guardar el pedido:", error);
+        alert("❌ Hubo un problema al guardar tu pedido. Intenta de nuevo.");
+      });
   };
 
   return (
