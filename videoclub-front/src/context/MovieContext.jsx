@@ -1,28 +1,26 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import PropTypes from "prop-types"; // ✅ Importamos PropTypes
+import PropTypes from "prop-types";
 
 // Crear el contexto de películas
 const MovieContext = createContext();
 
 export const MovieProvider = ({ children }) => {
   const [movies, setMovies] = useState([]);
+  const API_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
   useEffect(() => {
-    // 🔥 Simulación de API de películas
     const fetchMovies = async () => {
-      const fakeMovies = [
-        {
-          id: 1,
-          name: "Jurassic Park",
-          price: 3.99,
-          image: "/img/jurassic.jpg",
-        },
-        { id: 2, name: "Titanic", price: 2.99, image: "/img/titanic.jpg" },
-        { id: 3, name: "Matrix", price: 4.99, image: "/img/matrix.jpg" },
-      ];
-      console.log("🎬 Películas cargadas en MovieContext:", fakeMovies);
-
-      setMovies(fakeMovies);
+      try {
+        const response = await fetch(`${API_URL}/movies`);
+        if (!response.ok) {
+          throw new Error("Error al obtener las películas");
+        }
+        const data = await response.json();
+        setMovies(data);
+        console.log("🎬 Películas cargadas desde el backend:", data);
+      } catch (error) {
+        console.error("❌ Error al cargar películas:", error);
+      }
     };
 
     fetchMovies();
@@ -33,10 +31,8 @@ export const MovieProvider = ({ children }) => {
   );
 };
 
-// ✅ Agregamos la validación de `children`
 MovieProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-// Hook personalizado para acceder al contexto
 export const useMovies = () => useContext(MovieContext);

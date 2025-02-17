@@ -16,7 +16,17 @@ const MovieCard = ({ movie }) => {
 
   // Función para añadir la película al carrito
   const handleAddToCart = () => {
-    dispatch({ type: "ADD_ITEM", payload: movie });
+    dispatch({
+      type: "ADD_ITEM",
+      payload: {
+        movie: {
+          _id: movie._id,
+          name: movie.name,
+          price: movie.price,
+        },
+        quantity: 1,
+      },
+    });
   };
 
   console.log("🎬 MovieCard - Datos de la película:", movie); // 🔥 Debugging
@@ -54,7 +64,7 @@ const MovieCard = ({ movie }) => {
           </Typography>
           {/* Precio de la película */}
           <Typography variant="h6" component="div" sx={{ paddingTop: "8px" }}>
-            ${movie.price}
+            €{movie.price}
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -71,8 +81,8 @@ const MovieCard = ({ movie }) => {
 // ✅ Corregimos PropTypes para coincidir con los datos usados
 MovieCard.propTypes = {
   movie: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired, // 🔥 Antes decía `title`, ahora es `name`
+    _id: PropTypes.string.isRequired, // 🔥 Agregamos `_id` correctamente
+    name: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     image: PropTypes.string.isRequired,
   }).isRequired,

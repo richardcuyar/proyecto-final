@@ -13,7 +13,7 @@ const MovieList = ({ movies }) => {
       {movies.map((movie) => {
         console.log("🧐 Película en MovieList:", movie); // 🔥 Debugging
         return (
-          <Grid item key={movie.id} xs={12} sm={6} md={4}>
+          <Grid item key={movie._id} xs={12} sm={6} md={4}>
             <MovieCard movie={movie} />
           </Grid>
         );

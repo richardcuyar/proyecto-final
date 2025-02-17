@@ -9,19 +9,35 @@ const initialState = {
 const cartReducer = (state, action) => {
   switch (action.type) {
     case "ADD_ITEM": {
-      const updatedCart = [...state.items, action.payload];
+      if (!action.payload.movie || !action.payload.movie._id) {
+        console.error(
+          "❌ Error: La película es inválida o no tiene un _id:",
+          action.payload
+        );
+        return state;
+      }
+
+      const updatedCart = [
+        ...state.items,
+        {
+          movie: action.payload.movie._id,
+          name: action.payload.movie.name,
+          price: action.payload.movie.price,
+          quantity: action.payload.quantity,
+        },
+      ];
+
       const newTotal = updatedCart.reduce((sum, item) => sum + item.price, 0);
 
       localStorage.setItem("cart", JSON.stringify(updatedCart));
       localStorage.setItem("cartTotal", JSON.stringify(newTotal));
 
-      console.log("✅ Carrito actualizado:", updatedCart);
       return { items: updatedCart, total: newTotal };
     }
 
     case "REMOVE_ITEM": {
       const itemIndex = state.items.findIndex(
-        (item) => item.id === action.payload.id
+        (item) => item.movie === action.payload.movie
       );
 
       if (itemIndex !== -1) {
