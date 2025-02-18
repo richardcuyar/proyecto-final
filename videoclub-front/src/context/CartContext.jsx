@@ -29,10 +29,38 @@ const cartReducer = (state, action) => {
 
       const newTotal = updatedCart.reduce((sum, item) => sum + item.price, 0);
 
+      // 🔍 Guarda el carrito global
       localStorage.setItem("cart", JSON.stringify(updatedCart));
       localStorage.setItem("cartTotal", JSON.stringify(newTotal));
 
+      // 🔍 Guarda el carrito específico del usuario
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user) {
+        localStorage.setItem(`cart_${user.email}`, JSON.stringify(updatedCart));
+        localStorage.setItem(
+          `cartTotal_${user.email}`,
+          JSON.stringify(newTotal)
+        );
+      }
+
       return { items: updatedCart, total: newTotal };
+
+      /*  const updatedCart = [
+        ...state.items,
+        {
+          movie: action.payload.movie._id,
+          name: action.payload.movie.name,
+          price: action.payload.movie.price,
+          quantity: action.payload.quantity,
+        },
+      ];
+
+      const newTotal = updatedCart.reduce((sum, item) => sum + item.price, 0);
+
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      localStorage.setItem("cartTotal", JSON.stringify(newTotal));
+
+      return { items: updatedCart, total: newTotal };*/
     }
 
     case "REMOVE_ITEM": {
@@ -56,9 +84,30 @@ const cartReducer = (state, action) => {
       return state;
     }
 
-    case "CLEAR_CART":
+    /* case "CLEAR_CART":
       console.log("🗑 Carrito limpiado, pero no se borra de localStorage.");
       return { items: [], total: 0 }; // 🔥 NO borrar `localStorage`
+*/
+    case "CLEAR_CART": {
+      // 🔍 Vaciamos el carrito
+      const updatedCart = [];
+      const newTotal = 0;
+
+      // 🔍 Actualizamos el carrito global y el del usuario
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      localStorage.setItem("cartTotal", JSON.stringify(newTotal));
+
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user) {
+        localStorage.setItem(`cart_${user.email}`, JSON.stringify(updatedCart));
+        localStorage.setItem(
+          `cartTotal_${user.email}`,
+          JSON.stringify(newTotal)
+        );
+      }
+
+      return { items: updatedCart, total: newTotal };
+    }
 
     case "SET_CART":
       console.log("🔄 Restaurando carrito desde localStorage:", action.payload);

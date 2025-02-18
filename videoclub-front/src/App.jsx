@@ -14,11 +14,27 @@ import {
 import { UserProvider } from "./context/UserContext";
 import { CartProvider } from "./context/CartContext"; // 🔥 CartProvider ahora envuelve todo
 import { MovieProvider } from "./context/MovieContext";
-import { AuthProvider } from "./context/AuthContext"; // ✅ Importamos correctamente
+import { AuthProvider, useAuth } from "./context/AuthContext"; // ✅ Importamos correctamente
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import { Container, Box } from "@mui/material";
+import { useEffect } from "react";
+
+// 🔍 Restaurar sesión al cargar la aplicación
+function RestoreSession() {
+  const { setUser } = useAuth();
+
+  useEffect(() => {
+    const sessionUser = JSON.parse(sessionStorage.getItem("user"));
+    if (sessionUser) {
+      setUser(sessionUser);
+      console.log("🔍 Sesión restaurada desde sessionStorage:", sessionUser);
+    }
+  }, [setUser]);
+
+  return null;
+}
 
 function App() {
   return (
@@ -27,6 +43,8 @@ function App() {
         <CartProvider>
           <AuthProvider>
             <MovieProvider>
+              {/* 🔍 Restauramos la sesión al cargar la aplicación */}
+              <RestoreSession />
               <BrowserRouter>
                 <Box
                   sx={{
