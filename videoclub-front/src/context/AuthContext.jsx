@@ -67,32 +67,27 @@ export const AuthProvider = ({ children }) => {
   };
 */
   // ✅ LOGIN DE USUARIO
+  // ✅ Iniciar sesión
   const login = async (email, password) => {
-    const trimmedEmail = email.trim();
-    const trimmedPassword = password.trim();
-
+    const trimmedEmail = email.trim(); // Elimina espacios en blanco
+    const trimmedPassword = password.trim(); // Elimina espacios en blanco
+    console.log("🔑 Datos enviados desde el frontend:", {
+      trimmedEmail,
+      trimmedPassword,
+    });
+    //  console.log("🔑 Datos enviados desde el frontend:", { email, password }); // Verifica los datos
+    // console.log("🔑 Contraseña enviada desde el frontend:", password); // Verifica la contraseña
     try {
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: trimmedEmail,
-          password: trimmedPassword,
-        }),
+        body: JSON.stringify({ email, password }),
       });
-
       const data = await response.json();
-
+      console.log("📨 Respuesta del backend:", data); // Verifica la respuesta
       if (response.ok) {
         setUser(data);
-
-        // 🛠️ Guardar usuario en sessionStorage para que se elimine al cerrar el navegador
-        sessionStorage.setItem("user", JSON.stringify(data));
-
-        // 🛠️ Mantener el carrito en localStorage
-        localStorage.setItem(`cart_${data.email}`, JSON.stringify([]));
-        localStorage.setItem(`cartTotal_${data.email}`, JSON.stringify(0));
-
+        localStorage.setItem("user", JSON.stringify(data));
         console.log("✅ Login exitoso:", data);
       } else {
         console.error("❌ Error en el login:", data.message);
@@ -102,20 +97,20 @@ export const AuthProvider = ({ children }) => {
       console.error("🔥 Error al iniciar sesión:", error);
     }
   };
-
-  // ✅ LOGOUT DEL USUARIO
+  // ✅ Cerrar sesión
   const logout = () => {
     if (user) {
-      // 🛠️ Mantener el carrito en localStorage pero eliminar la sesión
-      sessionStorage.removeItem("user"); // Elimina la sesión
+      localStorage.setItem(
+        `cart_${user.email}`,
+        JSON.stringify(JSON.parse(localStorage.getItem("cart")) || [])
+      );
+      localStorage.setItem(
+        `cartTotal_${user.email}`,
+        JSON.stringify(JSON.parse(localStorage.getItem("cartTotal")) || 0)
+      );
     }
-
-    // 🔍 Limpiamos el carrito global (pero se mantiene el específico del usuario)
-    localStorage.removeItem("cart");
-    localStorage.removeItem("cartTotal");
-
-    // 🔍 Limpiamos el estado global
     setUser(null);
+    localStorage.removeItem("user");
     if (dispatch) dispatch({ type: "CLEAR_CART" });
   };
 
