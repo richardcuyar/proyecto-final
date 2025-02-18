@@ -1,4 +1,3 @@
-// import React from "react";
 import {
   Card,
   CardContent,
@@ -13,6 +12,9 @@ import { useCart } from "../../context/CartContext"; // 🔥 Importamos el conte
 
 const MovieCard = ({ movie }) => {
   const { dispatch } = useCart(); // 🔥 Accedemos al dispatch del carrito
+
+  // Verificar si la película está fuera de stock
+  const isOutOfStock = movie.stock === 0;
 
   // Función para añadir la película al carrito
   const handleAddToCart = () => {
@@ -40,6 +42,7 @@ const MovieCard = ({ movie }) => {
         boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
         transition: "0.3s ease-in-out",
         "&:hover": { boxShadow: "0 5px 15px rgba(0,0,0,0.2)" },
+        filter: isOutOfStock ? "grayscale(100%)" : "none", // Blanco y negro si no hay stock
       }}
     >
       <CardActionArea>
@@ -53,6 +56,7 @@ const MovieCard = ({ movie }) => {
             objectFit: "cover",
             borderTopLeftRadius: "20px",
             borderTopRightRadius: "20px",
+            filter: isOutOfStock ? "grayscale(100%)" : "none", // Blanco y negro si no hay stock
           }}
           onError={(e) =>
             console.error("❌ Error cargando imagen:", e.target.src)
@@ -70,8 +74,13 @@ const MovieCard = ({ movie }) => {
         </CardContent>
       </CardActionArea>
       <CardActions disableSpacing sx={{ justifyContent: "flex-end" }}>
-        {/* 🔥 Botón para añadir al carrito */}
-        <Button size="small" color="primary" onClick={handleAddToCart}>
+        {/* 🔥 Botón para añadir al carrito, desactivado si no hay stock */}
+        <Button
+          size="small"
+          color="primary"
+          onClick={handleAddToCart}
+          disabled={isOutOfStock} // Desactiva el botón si no hay stock
+        >
           Agregar al carrito
         </Button>
       </CardActions>
@@ -85,6 +94,7 @@ MovieCard.propTypes = {
     _id: PropTypes.string.isRequired, // 🔥 Agregamos `_id` correctamente
     name: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
+    stock: PropTypes.number.isRequired, // Añadimos el campo stock
     image: PropTypes.string.isRequired,
   }).isRequired,
 };
