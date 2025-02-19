@@ -8,6 +8,7 @@ import {
   LoginPage,
   RegisterPage, // 🔥 Nueva ruta de registro añadida
   OrderSummaryPage,
+  OrderSummaryListPage,
   ProfilePage,
   PaymentPage,
 } from "./pages"; // ✅ Importamos directamente desde `pages/index.jsx`
@@ -78,6 +79,16 @@ function App() {
                         element={
                           <ProtectedRoute>
                             <OrderSummaryPage />
+                          </ProtectedRoute>
+                        }
+                      />
+
+                      {/* Ruta protegida para Resumen del Pedido */}
+                      <Route
+                        path="/order-summary-list/:userId"
+                        element={
+                          <ProtectedRoute>
+                            <OrderSummaryListPage />
                           </ProtectedRoute>
                         }
                       />

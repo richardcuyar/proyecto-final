@@ -18,6 +18,7 @@ import { Link } from "react-router-dom"; // Importamos link
 
 const Header = () => {
   const { user, logout } = useAuth(); // ✅ Obtener usuario y logout
+  console.log("holi", user);
   const { state } = useCart(); // ✅ Obtener carrito
   const navigate = useNavigate();
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -79,9 +80,13 @@ const Header = () => {
       </AppBar>
 
       {/* 📌 Enlace a "Mis Alquileres" */}
-      <Link to="/order-summary">
-        <Button color="inherit">Mis Alquileres</Button>
-      </Link>
+
+      <Button
+        onClick={() => navigate(`/order-summary-list/${user._id}`)}
+        color="inherit"
+      >
+        Mis Alquileres
+      </Button>
 
       {/* 📌 Enlace a "Mi Perfil" */}
       <Link to="/profile">

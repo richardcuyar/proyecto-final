@@ -5,6 +5,7 @@ export { default as RegisterPage } from "./register"; // 🔥 Agregar esta líne
 import OrderSummaryPage from "./order-summary";
 import ProfilePage from "./profile";
 import PaymentPage from "./payment";
+import OrderSummaryListPage from "./order-summary-list";
 
 export {
   HomePage,
@@ -13,4 +14,5 @@ export {
   OrderSummaryPage,
   ProfilePage,
   PaymentPage,
+  OrderSummaryListPage,
 };

@@ -11,19 +11,21 @@ import {
   Box,
 } from "@mui/material";
 
-const OrderSummaryPage = () => {
-  const { orderId } = useParams(); // Obtenemos el ID del pedido desde la URL
+const OrderSummaryListPage = () => {
+  const { userId } = useParams(); // Obtenemos el ID del pedido desde la URL
 
   const [order, setOrder] = useState([]);
 
   console.log("🎬 OrderSummaryPage Renderizado"); // Esto se verá cada vez que el componente se renderice
 
   useEffect(() => {
-    console.log("🧐 Order ID: ", orderId); // Verifica si el ID del pedido es correcto
+    console.log("🧐 Order ID: ", userId); // Verifica si el ID del pedido es correcto
     // 🔍 Cargar el pedido correcto usando el orderId de la URL
     const fetchOrder = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/orders/${orderId}`);
+        const response = await fetch(
+          `http://localhost:3000/orders?userId=${userId}`
+        );
         if (!response.ok) {
           throw new Error("No se pudo cargar el pedido");
         }
@@ -37,7 +39,7 @@ const OrderSummaryPage = () => {
     };
 
     fetchOrder();
-  }, [orderId]);
+  }, [userId]);
 
   return (
     <Box
@@ -50,32 +52,32 @@ const OrderSummaryPage = () => {
       }}
     >
       <Typography variant="h5" sx={{ marginBottom: 2 }}>
-        📦 Resumen del Pedido
+        📦 Resumen de todos los Pedidos
       </Typography>
 
       {/* Condicional para mostrar datos dependiendo si se cargó el pedido o no */}
-      {order === null ? (
-        <Typography variant="body1">Cargando...</Typography>
-      ) : !order || !order.movies ? (
-        <Typography variant="body1">
-          No se encontró el pedido o no tiene productos.
-        </Typography>
-      ) : (
+      {order.length ? (
         <>
           <List>
-            {order.movies.map((movie, index) => (
-              <ListItem key={`${movie.movie._id}-${index}`} divider>
-                <ListItemText
-                  primary={movie.movie.name}
-                  secondary={`Precio: €${movie.movie.price} - Cantidad: ${movie.quantity}`}
-                />
+            {order.map((order) => (
+              <ListItem key={`${order._id}`} divider>
+                <List>
+                  {order.movies.map((movie, index) => (
+                    <ListItem key={`${movie.movie._id}-${index}`} divider>
+                      <ListItemText
+                        primary={movie.movie.name}
+                        secondary={`Precio: €${movie.movie.price} - Cantidad: ${movie.quantity}`}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
               </ListItem>
             ))}
           </List>
 
           <Divider sx={{ my: 2 }} />
 
-          <Typography variant="h6">
+          {/*   <Typography variant="h6">
             Total:{" "}
             <strong>
               €
@@ -86,11 +88,13 @@ const OrderSummaryPage = () => {
                 )
                 .toFixed(2)}
             </strong>
-          </Typography>
+          </Typography>  */}
         </>
+      ) : (
+        ""
       )}
     </Box>
   );
 };
 
-export default OrderSummaryPage;
+export default OrderSummaryListPage;
