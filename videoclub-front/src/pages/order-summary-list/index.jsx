@@ -30,7 +30,7 @@ const OrderSummaryListPage = () => {
           throw new Error("No se pudo cargar el pedido");
         }
         const data = await response.json();
-        console.log("🚨 Pedido obtenido:", data); // Añadir log para ver la estructura
+        console.log("🚨 Pedidos obtenidos:", data); // Añadir log para ver la estructura
 
         setOrder(data);
       } catch (error) {
@@ -76,6 +76,10 @@ const OrderSummaryListPage = () => {
                     </ListItem>
                   ))}
                 </List>
+                {/* Mostrar el total de la compra */}
+                <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                  Total: €{order.total.toFixed(2)}
+                </Typography>
               </ListItem>
             ))}
           </List>
