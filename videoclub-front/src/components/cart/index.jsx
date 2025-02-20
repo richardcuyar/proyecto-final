@@ -24,13 +24,19 @@ const Cart = () => {
   return (
     <Box sx={{ width: 320, p: 2 }}>
       {/* 🔥 Título del carrito */}
-      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+      <Typography
+        variant="h6"
+        component="div"
+        sx={{ flexGrow: 1, textAlign: "center", marginBottom: 2 }}
+      >
         🎥 Carrito de Alquiler
       </Typography>
 
       <List>
         {state.items.length === 0 ? (
-          <Typography variant="body1">El carrito está vacío</Typography>
+          <Typography variant="body1" sx={{ textAlign: "center" }}>
+            El carrito está vacío
+          </Typography>
         ) : (
           <>
             {state.items.map((movie, index) => (
@@ -38,11 +44,19 @@ const Cart = () => {
                 <ListItemText
                   primary={movie.name}
                   secondary={`€${movie.price.toFixed(2)}`}
+                  sx={{ color: "black" }} // Aquí añadimos el estilo
                 />
                 <Button
                   variant="outlined"
                   color="secondary"
                   onClick={() => handleRemoveFromCart(movie)}
+                  sx={{
+                    borderRadius: 5,
+                    padding: "8px 20px",
+                    "&:hover": {
+                      backgroundColor: "#FFCC00",
+                    },
+                  }}
                 >
                   ❌
                 </Button>
@@ -50,7 +64,7 @@ const Cart = () => {
             ))}
 
             {/* 🔥 Mostrar el total del carrito */}
-            <Typography variant="h6" sx={{ mt: 2 }}>
+            <Typography variant="h6" sx={{ mt: 2, textAlign: "center" }}>
               Total: €{state.total.toFixed(2)}
             </Typography>
 
@@ -60,7 +74,16 @@ const Cart = () => {
               color="error"
               onClick={handleClearCart}
               fullWidth
-              sx={{ mt: 2 }}
+              sx={{
+                mt: 2,
+                backgroundColor: "#FFD700", // Color amarillo
+                color: "#000", // Texto negro
+                borderRadius: 5,
+                padding: "10px 20px",
+                "&:hover": {
+                  backgroundColor: "#FFCC00",
+                },
+              }}
             >
               Vaciar Carrito 🗑️
             </Button>

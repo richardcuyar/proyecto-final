@@ -35,37 +35,78 @@ const Header = () => {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: "#212121" }}>
         <Toolbar>
           {/* 🎬 Título del Videoclub */}
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-              🎬 Mi Videoclub
+          <Typography
+            variant="h6"
+            sx={{
+              flexGrow: 1,
+              color: "#FFD700",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+            }}
+          >
+            <Link to="/" style={{ textDecoration: "none", color: "#FFD700" }}>
+              🎬 Rent a Movie
             </Link>
           </Typography>
 
           {/* 👤 Icono de usuario */}
-          <IconButton color="inherit">
+          <IconButton color="inherit" sx={{ color: "#FFD700" }}>
             <AccountCircle />
           </IconButton>
 
           {/* Si el usuario está autenticado, mostramos su email y logout */}
           {user ? (
             <>
-              <Typography variant="body1" sx={{ marginRight: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{ marginRight: 2, color: "#FFD700" }}
+              >
                 {user.email}
               </Typography>
-              <Button color="inherit" onClick={handleLogout}>
+              <Button
+                color="inherit"
+                onClick={handleLogout}
+                sx={{
+                  color: "white",
+                  "&:hover": {
+                    color: "white", // Cambia el color al hacer hover
+                    backgroundColor: "#FF6F00", // Un color retro de hover (naranja)
+                  },
+                }}
+              >
                 Cerrar Sesión
               </Button>
             </>
           ) : (
-            <Button color="inherit" onClick={() => navigate("/login")}>
+            <Button
+              color="inherit"
+              onClick={() => navigate("/login")}
+              sx={{
+                color: "white",
+                "&:hover": {
+                  color: "white", // Cambia el color al hacer hover
+                  backgroundColor: "#FF6F00", // Un color retro de hover (naranja)
+                },
+              }}
+            >
               Iniciar Sesión
             </Button>
           )}
-          {!user && ( // crear cuenta
-            <Button color="inherit" onClick={() => navigate("/register")}>
+          {!user && (
+            <Button
+              color="inherit"
+              onClick={() => navigate("/register")}
+              sx={{
+                color: "white",
+                "&:hover": {
+                  color: "white", // Cambia el color al hacer hover
+                  backgroundColor: "#FF6F00", // Un color retro de hover (naranja)
+                },
+              }}
+            >
               Crear Cuenta
             </Button>
           )}
@@ -73,24 +114,50 @@ const Header = () => {
           {/* 🛒 Icono del carrito con el número de películas alquiladas */}
           <IconButton color="inherit" onClick={toggleCart}>
             <Badge badgeContent={state.items.length} color="secondary">
-              <ShoppingCartIcon className="shake-animation" />
+              <ShoppingCartIcon
+                className="shake-animation"
+                sx={{ color: "#FFD700" }}
+              />
             </Badge>
           </IconButton>
         </Toolbar>
       </AppBar>
 
       {/* 📌 Enlace a "Mis Alquileres" */}
-
       <Button
-        onClick={() => navigate(`/order-summary-list/${user._id}`)}
+        onClick={() => navigate(`/order-summary-list/${user?._id}`)}
         color="inherit"
+        sx={{
+          fontWeight: "bold",
+          color: "#FFD700", // Color amarillo por defecto
+          textTransform: "uppercase",
+          "&:hover": {
+            color: "#ffffff", // Cambiar color de texto a azul Blockbuster
+            backgroundColor: "transparent", // Fondo transparente
+            borderBottom: "3px solidrgb(255, 255, 255)", // Barra azul Blockbuster
+          },
+        }}
       >
         Mis Alquileres
       </Button>
 
       {/* 📌 Enlace a "Mi Perfil" */}
       <Link to="/profile">
-        <Button color="inherit">Mi Perfil</Button>
+        <Button
+          color="inherit"
+          sx={{
+            fontWeight: "bold",
+            color: "#FFD700", // Color amarillo por defecto
+            textTransform: "uppercase",
+            "&:hover": {
+              color: "#ffffff", // Cambiar color de texto a azul Blockbuster
+              backgroundColor: "transparent", // Fondo transparente
+              borderBottom: "3px solidrgb(248, 252, 255)", // Barra azul Blockbuster
+            },
+          }}
+        >
+          Mi Perfil
+        </Button>
       </Link>
 
       {/* 📌 Drawer para el carrito con nueva prop para cerrar el carrito */}

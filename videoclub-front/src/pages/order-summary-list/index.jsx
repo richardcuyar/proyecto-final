@@ -49,10 +49,11 @@ const OrderSummaryListPage = () => {
         padding: 3,
         boxShadow: 3,
         borderRadius: 2,
+        backgroundColor: "white",
       }}
     >
       <Typography variant="h5" sx={{ marginBottom: 2 }}>
-        📦 Resumen de todos los Pedidos
+        📦 Todos mis alquileres
       </Typography>
 
       {/* Condicional para mostrar datos dependiendo si se cargó el pedido o no */}

@@ -26,14 +26,14 @@ const ProfilePage = () => {
         boxShadow: 3,
       }}
     >
-      <Typography variant="h4" sx={{ marginBottom: 2 }}>
+      <Typography variant="h4" sx={{ marginBottom: 2, color: "black" }}>
         👤 Mi Perfil
       </Typography>
       <Divider sx={{ marginBottom: 2 }} />
-      <Typography variant="body1">
+      <Typography variant="body1" sx={{ color: "black" }}>
         <strong>Nombre:</strong> {user.name}
       </Typography>
-      <Typography variant="body1">
+      <Typography variant="body1" sx={{ color: "black" }}>
         <strong>Email:</strong> {user.email}
       </Typography>
       {/* <Typography variant="body1" sx={{ wordBreak: "break-all" }}>

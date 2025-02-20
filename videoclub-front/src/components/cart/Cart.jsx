@@ -34,11 +34,23 @@ const Cart = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Box sx={{ padding: "20px", maxWidth: "400px" }}>
-      <Typography variant="h6">🎥 Carrito de Alquiler</Typography>
+    <Box
+      sx={{ padding: "20px", maxWidth: "400px", backgroundColor: "#ffffff" }}
+    >
+      <Typography
+        variant="h6"
+        sx={{ textAlign: "center", marginBottom: 2, color: "black" }}
+      >
+        🎥 Carrito de Alquiler
+      </Typography>
 
       {state.items.length === 0 ? (
-        <Typography variant="body1">El carrito está vacío.</Typography>
+        <Typography
+          variant="body1"
+          sx={{ textAlign: "center", color: "black" }}
+        >
+          El carrito está vacío.
+        </Typography>
       ) : (
         <>
           <List>
@@ -47,11 +59,19 @@ const Cart = ({ isOpen, onClose }) => {
                 <ListItemText
                   primary={movie.name}
                   secondary={`Precio: €${movie.price}`}
+                  sx={{ color: "black" }} // Aquí añadimos el estilo
                 />
                 <Button
                   variant="outlined"
                   color="secondary"
                   onClick={() => handleRemoveFromCart(movie)}
+                  sx={{
+                    borderRadius: 5,
+                    padding: "8px 20px",
+                    "&:hover": {
+                      backgroundColor: "#FFCC00",
+                    },
+                  }}
                 >
                   Eliminar
                 </Button>
@@ -62,7 +82,10 @@ const Cart = ({ isOpen, onClose }) => {
           <Divider sx={{ my: 2 }} />
 
           {/* 🔥 Mostrar el total del carrito */}
-          <Typography variant="h6">
+          <Typography
+            variant="h6"
+            sx={{ textAlign: "center", marginBottom: 2 }}
+          >
             Total: <strong>€{state.total.toFixed(2)}</strong>
           </Typography>
 
@@ -71,18 +94,36 @@ const Cart = ({ isOpen, onClose }) => {
             variant="contained"
             color="error"
             fullWidth
-            sx={{ mt: 2 }}
+            sx={{
+              mt: 2,
+              backgroundColor: "#FFD700", // Color amarillo
+              color: "#000", // Texto negro
+              borderRadius: 5,
+              padding: "10px 20px",
+              "&:hover": {
+                backgroundColor: "#FFCC00",
+              },
+            }}
             onClick={handleClearCart}
           >
             🗑 Vaciar Carrito
           </Button>
 
-          {/* 🔥 Botón para ir a pagar, ahora cierra el carrito antes de redirigir */}
+          {/* 🔥 Botón para ir a pagar */}
           <Button
             variant="contained"
             color="success"
             fullWidth
-            sx={{ mt: 2 }}
+            sx={{
+              mt: 2,
+              backgroundColor: "#FFD700", // Color amarillo
+              color: "#000", // Texto negro
+              borderRadius: 5,
+              padding: "10px 20px",
+              "&:hover": {
+                backgroundColor: "#FFCC00",
+              },
+            }}
             onClick={handlePayment}
           >
             💳 Pagar

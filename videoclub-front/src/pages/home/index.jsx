@@ -6,8 +6,8 @@ const HomePage = () => {
   const { movies } = useMovies(); // 🔥 Obtenemos las películas
 
   return (
-    <div>
-      <h1>Películas Disponibles</h1>
+    <div className="home-container">
+      <h1 className="home-title">PELICULAS DISPONIBLES</h1>
       <MovieList movies={movies} />
     </div>
   );

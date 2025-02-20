@@ -43,6 +43,7 @@ const MovieCard = ({ movie }) => {
         transition: "0.3s ease-in-out",
         "&:hover": { boxShadow: "0 5px 15px rgba(0,0,0,0.2)" },
         filter: isOutOfStock ? "grayscale(100%)" : "none", // Blanco y negro si no hay stock
+        backgroundColor: "#282828", // Color de fondo más oscuro
       }}
     >
       <CardActionArea>
@@ -62,26 +63,54 @@ const MovieCard = ({ movie }) => {
             console.error("❌ Error cargando imagen:", e.target.src)
           }
         />
-        <CardContent>
+        <CardContent sx={{ backgroundColor: "#333" }}>
           {/* Nombre de la película */}
-          <Typography gutterBottom variant="h6" component="div" noWrap>
+          <Typography
+            gutterBottom
+            variant="h6"
+            component="div"
+            noWrap
+            sx={{
+              color: "#FFD700", // Color amarillo brillante
+              textTransform: "uppercase", // Texto en mayúsculas
+              fontWeight: "bold", // Texto en negrita
+            }}
+          >
             {movie.name} {/* ✅ Usamos `name` en lugar de `title` */}
           </Typography>
           {/* Precio de la película */}
-          <Typography variant="h6" component="div" sx={{ paddingTop: "8px" }}>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{
+              paddingTop: "8px",
+              color: "#FFD700", // Color amarillo brillante
+            }}
+          >
             €{movie.price}
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions disableSpacing sx={{ justifyContent: "flex-end" }}>
+      <CardActions
+        disableSpacing
+        sx={{ justifyContent: "flex-end", backgroundColor: "#333" }}
+      >
         {/* 🔥 Botón para añadir al carrito, desactivado si no hay stock */}
         <Button
           size="small"
           color="primary"
           onClick={handleAddToCart}
           disabled={isOutOfStock} // Desactiva el botón si no hay stock
+          sx={{
+            backgroundColor: isOutOfStock ? "#aaa" : "#FFD700", // Color amarillo cuando hay stock
+            color: isOutOfStock ? "#666" : "#000", // Color negro cuando hay stock
+            "&:hover": {
+              backgroundColor: isOutOfStock ? "#aaa" : "#FFCC00", // Color dorado cuando se pasa por encima
+            },
+            borderRadius: "20px", // Bordes redondeados
+          }}
         >
-          Agregar al carrito
+          {isOutOfStock ? "Sin Stock" : "Agregar al carrito"}
         </Button>
       </CardActions>
     </Card>
