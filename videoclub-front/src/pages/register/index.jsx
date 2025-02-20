@@ -21,7 +21,7 @@ const RegisterPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     register(formData); // 📌 Llamamos a la función de registro
-    navigate("/login"); // ✅ Redirigimos al usuario al login
+    navigate("/home"); // ✅ Redirigimos al usuario al login
   };
 
   return (

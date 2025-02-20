@@ -129,7 +129,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Registrar nuevo usuario
-  const register = async ({ name, email, password }) => {
+  const register = async ({ name, email, password, navigate }) => {
     try {
       const response = await fetch("http://localhost:3000/auth/register", {
         method: "POST",
@@ -140,7 +140,7 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       if (response.ok) {
         console.log("✅ Usuario registrado con éxito:", data);
-        login(email, password);
+        login(email, password, navigate);
         return true;
       } else {
         console.error("❌ Error en el registro:", data.message);
