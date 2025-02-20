@@ -59,8 +59,13 @@ const OrderSummaryListPage = () => {
       {order.length ? (
         <>
           <List>
-            {order.map((order) => (
+            {order.map((order, orderIndex) => (
               <ListItem key={`${order._id}`} divider>
+                {/* Mostrar el número de pedido */}
+                <Typography variant="h6">
+                  Pedido #{orderIndex + 1}
+                </Typography>{" "}
+                {/* orderIndex aquí */}
                 <List>
                   {order.movies.map((movie, index) => (
                     <ListItem key={`${movie.movie._id}-${index}`} divider>

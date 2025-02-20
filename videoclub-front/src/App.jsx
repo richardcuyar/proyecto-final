@@ -59,7 +59,6 @@ function App() {
                     <Routes>
                       {/* Ruta pública para Login */}
                       <Route path="/login" element={<LoginPage />} />
-
                       {/* 🔥 Nueva Ruta Pública para Registro */}
                       <Route path="/register" element={<RegisterPage />} />
 

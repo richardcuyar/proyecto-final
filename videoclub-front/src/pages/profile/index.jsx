@@ -36,7 +36,7 @@ const ProfilePage = () => {
       <Typography variant="body1">
         <strong>Email:</strong> {user.email}
       </Typography>
-      <Typography variant="body1" sx={{ wordBreak: "break-all" }}>
+      {/* <Typography variant="body1" sx={{ wordBreak: "break-all" }}>
         <strong>ID:</strong> {user._id}
       </Typography>
       <Typography
@@ -44,7 +44,7 @@ const ProfilePage = () => {
         sx={{ marginTop: 2, fontStyle: "italic", color: "gray" }}
       >
         🔐 Token (parcial): {user.token?.slice(0, 30)}...
-      </Typography>
+      </Typography> */}
     </Paper>
   );
 };

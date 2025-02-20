@@ -2,6 +2,7 @@ import React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useCart } from "./CartContext"; // ✅ Importamos el contexto del carrito
+import { useNavigate } from "react-router-dom";
 
 // Crear el contexto de autenticación
 const AuthContext = createContext();
@@ -63,7 +64,7 @@ export const AuthProvider = ({ children }) => {
   }, [user, dispatch]);
 
   // Login del usuario
-  const login = async (email, password) => {
+  const login = async (email, password, navigate) => {
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
 
@@ -96,6 +97,7 @@ export const AuthProvider = ({ children }) => {
             payload: { items: savedCart, total: savedTotal },
           });
         }
+        navigate("/home");
       } else {
         console.error("❌ Error en el login:", data.message);
         alert(data.message);
