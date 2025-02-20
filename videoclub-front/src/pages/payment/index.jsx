@@ -129,7 +129,7 @@ const PaymentPage = () => {
 
       {/* 🔥 Total a pagar */}
       <Typography variant="h6" sx={{ marginTop: 2 }}>
-        Total: ${state.total.toFixed(2)}
+        Total: €{state.total.toFixed(2)}
       </Typography>
 
       {/* Botón de pago */}

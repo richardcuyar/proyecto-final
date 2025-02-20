@@ -37,7 +37,7 @@ const Cart = () => {
               <ListItem key={`${movie.id}-${index}`} divider>
                 <ListItemText
                   primary={movie.name}
-                  secondary={`$${movie.price.toFixed(2)}`}
+                  secondary={`€${movie.price.toFixed(2)}`}
                 />
                 <Button
                   variant="outlined"
@@ -51,7 +51,7 @@ const Cart = () => {
 
             {/* 🔥 Mostrar el total del carrito */}
             <Typography variant="h6" sx={{ mt: 2 }}>
-              Total: ${state.total.toFixed(2)}
+              Total: €{state.total.toFixed(2)}
             </Typography>
 
             {/* 🔥 Botón para vaciar el carrito */}
