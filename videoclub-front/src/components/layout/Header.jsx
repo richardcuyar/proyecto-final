@@ -25,7 +25,7 @@ const Header = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate("/home");
   };
 
   // 🔥 Alternar visibilidad del carrito
@@ -47,7 +47,15 @@ const Header = () => {
               textTransform: "uppercase",
             }}
           >
-            <Link to="/" style={{ textDecoration: "none", color: "#FFD700" }}>
+            <Link
+              to="/"
+              style={{
+                textDecoration: "none",
+                color: "#FFD700",
+                fontSize: "1.8rem",
+                fontWeight: "bold",
+              }}
+            >
               🎬 Rent a Movie
             </Link>
           </Typography>

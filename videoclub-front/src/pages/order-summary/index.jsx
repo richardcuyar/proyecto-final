@@ -47,6 +47,7 @@ const OrderSummaryPage = () => {
         padding: 3,
         boxShadow: 3,
         borderRadius: 2,
+        backgroundColor: "white",
       }}
     >
       <Typography variant="h5" sx={{ marginBottom: 2 }}>

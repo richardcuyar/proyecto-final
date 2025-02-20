@@ -84,6 +84,7 @@ const PaymentPage = () => {
         padding: 3,
         boxShadow: 3,
         borderRadius: 2,
+        backgroundColor: "white",
       }}
     >
       <Typography variant="h5" sx={{ marginBottom: 2 }}>
@@ -97,6 +98,11 @@ const PaymentPage = () => {
         onChange={handleChange}
         fullWidth
         margin="normal"
+        sx={{
+          input: {
+            color: "black", // Cambia el color del texto a negro
+          },
+        }}
       />
 
       <TextField
@@ -106,6 +112,11 @@ const PaymentPage = () => {
         onChange={handleChange}
         fullWidth
         margin="normal"
+        sx={{
+          input: {
+            color: "black", // Cambia el color del texto a negro
+          },
+        }}
       />
 
       <TextField
@@ -115,6 +126,11 @@ const PaymentPage = () => {
         onChange={handleChange}
         fullWidth
         margin="normal"
+        sx={{
+          input: {
+            color: "black", // Cambia el color del texto a negro
+          },
+        }}
       />
 
       <TextField
@@ -125,6 +141,11 @@ const PaymentPage = () => {
         type="password"
         fullWidth
         margin="normal"
+        sx={{
+          input: {
+            color: "black", // Cambia el color del texto a negro
+          },
+        }}
       />
 
       {/* 🔥 Total a pagar */}

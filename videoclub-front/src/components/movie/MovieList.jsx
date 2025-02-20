@@ -1,4 +1,4 @@
-// import React from "react";
+import React from "react";
 import Grid from "@mui/material/Grid";
 import MovieCard from "./MovieCard";
 import PropTypes from "prop-types"; // ✅ Importamos PropTypes
@@ -25,12 +25,15 @@ const MovieList = ({ movies }) => {
 MovieList.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      _id: PropTypes.string.isRequired, // Ajustamos para que coincida con el _id en lugar de id
       name: PropTypes.string.isRequired,
       price: PropTypes.number.isRequired,
       image: PropTypes.string.isRequired,
+      releaseYear: PropTypes.number.isRequired, // Asegúrate de que la película tenga este campo
+      genre: PropTypes.string.isRequired, // Género
+      actors: PropTypes.arrayOf(PropTypes.string).isRequired, // Actores
     })
-  ),
+  ).isRequired, // Añadimos isRequired para asegurarnos de que la propiedad 'movies' sea obligatoria
 };
 
 export default MovieList;
